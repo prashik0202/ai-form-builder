@@ -6,7 +6,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import AiChat from '@/components/feature/AiChat'
-import FormRender from '@/components/feature/FormRender'
+import { LoginForm } from '@/types/forms'
+import DynamicForm from '@/components/feature/DynamicForm'
 
 const FormGenAIPage = () => {
   return (
@@ -19,7 +20,10 @@ const FormGenAIPage = () => {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={60}>
-        <FormRender />
+        {/* <FormRender /> */}
+        <div className='h-full flex flex-col justify-center'>
+          <DynamicForm formFields={LoginForm} />
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
   )

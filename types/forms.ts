@@ -36,10 +36,34 @@ export interface FormFields {
 }
 
 export const LoginForm: BaseForm = {
-  title: "Login to MetaInc.",
+  title: "Create your Account",
   submitButtonText: "Login",
   showResetButton: false,
   fields : [
+    {
+      name: "firstName",
+      label: "First Name",
+      placeholderText: "John",
+      helperText: "please enter your first name",
+      type: "text",
+      validations: {
+        minLengthVal: {
+          minLength: 3,
+          validationMessage: "Name must contain atlest 3 character"
+        },
+        maxLengthVal: {
+          maxLenght: 16,
+          validationMessage: "first name should not be more than 16 character"
+        }
+      }
+    },
+    {
+      name: "lastName",
+      label: "Last Name",
+      placeholderText: "Doe",
+      helperText: "please enter your last name",
+      type: "text",
+    },
     {
       name: "email",
       label: "Email Address",
