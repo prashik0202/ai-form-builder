@@ -6,6 +6,11 @@ import React from 'react';
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 interface DynamicFormProps {
   formFields: BaseForm;
@@ -15,16 +20,17 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
 
   const schema = dynamicFormSchema(formFields.fields);
 
-  type schemaType = z.infer<typeof schema>;
+  type schemaType = z.infer<ReturnType<typeof dynamicFormSchema>>;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset
-  } = useForm<schemaType>({
+  const defaultValues = formFields.fields.reduce((acc, field) => {
+    acc[field.name] = "";
+    return acc;
+  }, { } as schemaType)
+
+  const form = useForm<schemaType>({
     resolver: zodResolver(schema),
-    mode: "onChange"
+    mode: "onChange",
+    defaultValues
   });
 
   const handleFormSubmit = async (data: schemaType) => {
@@ -36,64 +42,103 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
   };
 
   return (
-    <div className={`w-xl mx-auto bg-white p-6 rounded-lg shadow-md`}>
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">{formFields.title}</h2>
-      
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-        {formFields.fields.map((field) => (
-          <div key={field.name} className="space-y-2">
-            <label 
-              htmlFor={field.name}
-              className="block text-sm font-medium text-gray-700"
-            >
-              {field.label}
-            </label>
+    <Card className={`w-full max-w-md mx-auto rounded-lg shadow-md`}>
+      <CardHeader>
+        <CardTitle>
+          {formFields.title}
+        </CardTitle>
+        {formFields.description && (
+          <CardDescription>{formFields.description}</CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+            {formFields.fields.map((formField) => {
+
+              switch (formField.fieldType) {
+                case "input":
+                  return(
+                    <FormField
+                      key={formField.name}
+                      control={form.control}
+                      name={formField.name}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{formField.label}</FormLabel>
+                          <FormControl>
+                            <Input placeholder={formField.placeholderText} {...field} type={formField.type} />
+                          </FormControl>
+                          {formField.helperText && (
+                            <FormDescription>
+                              {formField.helperText}
+                            </FormDescription>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )
+                
+                case "select":
+                  return(
+                    <FormField
+                      key={formField.name}
+                      control={form.control}
+                      name={formField.name}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{formField.label}</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className='w-full'>
+                                <SelectValue placeholder="Select a verified email to display" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {formField.options.map((option) => (
+                                <SelectItem key={option.value} value={option.value as string}>{option.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {formField.helperText && (
+                            <FormDescription>
+                              {formField.helperText}
+                            </FormDescription>
+                          )}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )
+                
+              }
+
+            })}
             
-            <input
-              id={field.name}
-              type={field.type}
-              placeholder={field.placeholderText}
-              className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors[field.name] ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register(field.name)}
-            />
-            
-            {/* Helper text */}
-            {field.helperText && !errors[field.name] && (
-              <p className="text-xs text-gray-500">{field.helperText}</p>
-            )}
-            
-            {/* Error message */}
-            {errors[field.name] && (
-              <p className="text-xs text-red-600">
-                {errors[field.name]?.message as string}
-              </p>
-            )}
-          </div>
-        ))}
-        
-        <div className="flex gap-3 pt-4">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting ? 'Loading...' : formFields.submitButtonText}
-          </button>
-          
-          {formFields.showResetButton && (
-            <button
-              type="button"
-              onClick={() => alert('reset')}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
-            >
-              Reset
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+
+              >
+                {form.formState.isSubmitting ? 'Loading...' : formFields.submitButtonText}
+              </Button>
+              
+              {formFields.showResetButton && (
+                <Button
+                  variant={"outline"}
+                  type="button"
+                  onClick={() => form.reset()}
+                >
+                  Reset
+                </Button>
+              )}
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
 
