@@ -22,7 +22,7 @@ const FormGenAIPage = () => {
       <ResizablePanel defaultSize={60}>
         {/* <FormRender /> */}
         <div className='h-full flex flex-col justify-center'>
-          <DynamicForm formFields={RegisterForm} />
+          <DynamicForm formFields={LoginForm} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

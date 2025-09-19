@@ -18,10 +18,13 @@ interface DynamicFormProps {
 
 const DynamicForm = ({ formFields }: DynamicFormProps) => {
 
+  // generating zod schema dyanmically
   const schema = dynamicFormSchema(formFields.fields);
 
+  // return the type of Schema
   type schemaType = z.infer<ReturnType<typeof dynamicFormSchema>>;
 
+  // defacult  values
   const defaultValues = formFields.fields.reduce((acc, field) => {
     acc[field.name] = "";
     return acc;
