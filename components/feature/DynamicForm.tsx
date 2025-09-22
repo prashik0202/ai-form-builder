@@ -1,11 +1,12 @@
 'use client';
+import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import z from 'zod';
 
 import { dynamicFormSchema } from '@/lib/dynamicSchema';
 import { BaseForm } from '@/types/forms';
-import React from 'react';
-import { useForm } from "react-hook-form"
-import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
@@ -38,14 +39,30 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
 
   const handleFormSubmit = async (data: schemaType) => {
     try {
-      console.log(data);
+      toast.success(
+        <div className='flex flex-col gap-1 bg-accent w-full p-3 rounded-md'>
+          {Object.entries(data).map(([key,value]) => (
+            <div key={key} className='flex flex-row gap-5 justify-between'>
+              <span className='font-medium'>{key} : </span>
+              <span className='font-light'>{value}</span>
+            </div>
+          ))}
+        </div>, {
+        action: {
+          label: "Ok",
+          onClick: () => console.log(data)
+        },
+      })
+      form.reset();
     } catch (error) {
-      console.error('Form submission error:', error);
+      if(error instanceof Error) {
+        toast.error("Something went wrong!");
+      }
     }
   };
 
   return (
-    <Card className={`w-full max-w-md mx-auto rounded-lg shadow-md`}>
+    <Card className={`w-full max-w-md mx-auto rounded-lg shadow-md max-h-[800px] overflow-y-auto`}>
       <CardHeader>
         <CardTitle>
           {formFields.title}

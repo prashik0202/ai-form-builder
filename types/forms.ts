@@ -23,14 +23,14 @@ interface BaseField {
       validationMessage: string;
     };
     maxLengthVal?: {
-      maxLenght: number;
+      maxLength: number;
       validationMessage: string;
     };
     minNumberVal? : {
       minNumber: number;
       validationMessage: string
     };
-    mqxNumberVal? : {
+    maxNumberVal? : {
       maxNumber: number;
       validationMessage: string
     }
@@ -65,7 +65,7 @@ export const LoginForm: BaseForm = {
       "helperText": "We may contact you regarding your feedback.",
       "validations": {
         "maxLengthVal": {
-          "maxLenght": 100,
+          "maxLength": 100,
           "validationMessage": "Email address cannot exceed 100 characters."
         }
       }
@@ -98,7 +98,7 @@ export const LoginForm: BaseForm = {
           "validationMessage": "Please provide at least 10 characters for your feedback."
         },
         "maxLengthVal": {
-          "maxLenght": 500,
+          "maxLength": 500,
           "validationMessage": "Feedback cannot exceed 500 characters."
         }
       }
@@ -106,210 +106,68 @@ export const LoginForm: BaseForm = {
   ]
 }
 
-
-
-// export const RegisterForm: BaseForm = {
-//   title: "Create Your Account",
-//   description: "Join us today! Fill out the form below to get started.",
-//   submitButtonText: "Register",
-//   showResetButton: true, // It's often helpful to have a reset button on registration forms
-//   fields : [
-//     {
-//       name: "firstName",
-//       label: "First Name",
-//       placeholderText: "John",
-//       helperText: "Please enter your first name.",
-//       type: "text",
-//       fieldType: "input",
-//       validations: {
-//         minLengthVal: {
-//           minLength: 2,
-//           validationMessage: "First name must be at least 2 characters."
-//         },
-//         maxLengthVal: {
-//           maxLenght: 50, // Corrected typo: maxLength
-//           validationMessage: "First name cannot exceed 50 characters."
-//         }
-//       }
-//     },
-//     {
-//       name: "lastName",
-//       label: "Last Name",
-//       placeholderText: "Doe",
-//       helperText: "Please enter your last name.",
-//       type: "text",
-//       fieldType: "input",
-//       validations: {
-//         minLengthVal: {
-//           minLength: 2,
-//           validationMessage: "Last name must be at least 2 characters."
-//         },
-//         maxLengthVal: {
-//           maxLenght: 50, // Corrected typo: maxLength
-//           validationMessage: "Last name cannot exceed 50 characters."
-//         }
-//       }
-//     },
-//     {
-//       name: "email",
-//       label: "Email Address",
-//       placeholderText: "john.doe@example.com",
-//       helperText: "We'll send important updates to this email.",
-//       type: "email",
-//       fieldType: "input"
-//     },
-//     {
-//       name: "password",
-//       label: "Password",
-//       placeholderText: "Enter your password",
-//       helperText: "Password must be 8-16 characters long and include numbers and special characters.",
-//       type: "password",
-//       fieldType: "input",
-//       validations: {
-//         minLengthVal: {
-//           minLength: 8,
-//           validationMessage: "Password must be at least 8 characters long."
-//         },
-//         maxLengthVal: {
-//           maxLenght: 16, // Corrected typo: maxLength
-//           validationMessage: "Password cannot exceed 16 characters."
-//         }
-//       }
-//     },
-//     {
-//       name: "confirmPassword",
-//       label: "Confirm Password",
-//       placeholderText: "Re-enter your password",
-//       helperText: "Please re-enter your password to confirm.",
-//       type: "password",
-//       fieldType: "input",
-//       validations: {
-//         minLengthVal: {
-//           minLength: 8,
-//           validationMessage: "Password must be at least 8 characters long."
-//         },
-//         maxLengthVal: {
-//           maxLenght: 16, // Corrected typo: maxLength
-//           validationMessage: "Password cannot exceed 16 characters."
-//         }
-//         // Note: Cross-field validation (e.g., password and confirmPassword matching)
-//         // is typically handled by the form component's logic, not directly in this schema structure.
-//       }
-//     },
-//     {
-//       name: "role",
-//       label: "User Role",
-//       type: "text",
-//       fieldType: "select",
-//       placeholderText: "Select your role",
-//       options: [
-//         { label: "Standard User", value: "standard_user" },
-//         { label: "Premium User", value: "premium_user" },
-//         { label: "Guest", value: "guest" }
-//       ]
-//     }
-//   ]
-// };
-
-export const RegisterForm: BaseForm = {
-  title: "Create Your Account",
-  description: "Join us today! Fill out the form below to get started.",
-  submitButtonText: "Register",
-  showResetButton: true, // It's often helpful to have a reset button on registration forms
-  fields : [
+export const DummyFormFields: BaseForm = {
+  "title": "User Details Form",
+  "description": "Please fill in your personal information below.",
+  "submitButtonText": "Submit",
+  "showResetButton": true,
+  "fields": [
     {
-      name: "firstName",
-      label: "First Name",
-      placeholderText: "John",
-      helperText: "Please enter your first name.",
-      type: "text",
-      fieldType: "input",
-      validations: {
-        minLengthVal: {
-          minLength: 2,
-          validationMessage: "First name must be at least 2 characters."
-        },
-        maxLengthVal: {
-          maxLenght: 50, // Corrected typo: maxLength
-          validationMessage: "First name cannot exceed 50 characters."
+      "fieldType": "input",
+      "name": "name",
+      "label": "Full Name",
+      "type": "text",
+      "placeholderText": "e.g. John Doe",
+      "helperText": "Enter your first and last name.",
+      "validations": {
+        "minLengthVal": {
+          "minLength": 3,
+          "validationMessage": "Name must be at least 3 characters long."
         }
       }
     },
     {
-      name: "lastName",
-      label: "Last Name",
-      placeholderText: "Doe",
-      helperText: "Please enter your last name.",
-      type: "text",
-      fieldType: "input",
-      validations: {
-        minLengthVal: {
-          minLength: 2,
-          validationMessage: "Last name must be at least 2 characters."
-        },
-        maxLengthVal: {
-          maxLenght: 50, // Corrected typo: maxLength
-          validationMessage: "Last name cannot exceed 50 characters."
+      "fieldType": "input",
+      "name": "email",
+      "label": "Email Address",
+      "type": "email",
+      "placeholderText": "e.g. john.doe@example.com",
+      "helperText": "Enter a valid email address.",
+      "validations": {
+        "minLengthVal": {
+          "minLength": 5,
+          "validationMessage": "Email must be at least 5 characters long."
         }
       }
     },
     {
-      name: "email",
-      label: "Email Address",
-      placeholderText: "john.doe@example.com",
-      helperText: "We'll send important updates to this email.",
-      type: "email",
-      fieldType: "input"
-    },
-    {
-      name: "password",
-      label: "Password",
-      placeholderText: "Enter your password",
-      helperText: "Password must be 8-16 characters long and include numbers and special characters.",
-      type: "password",
-      fieldType: "input",
-      validations: {
-        minLengthVal: {
-          minLength: 8,
-          validationMessage: "Password must be at least 8 characters long."
-        },
-        maxLengthVal: {
-          maxLenght: 16, // Corrected typo: maxLength
-          validationMessage: "Password cannot exceed 16 characters."
+      "fieldType": "input",
+      "name": "phoneNumber",
+      "label": "Phone Number",
+      "type": "text",
+      "placeholderText": "e.g. +1 (555) 123-4567",
+      "helperText": "Enter your contact phone number.",
+      "validations": {
+        "minLengthVal": {
+          "minLength": 10,
+          "validationMessage": "Phone number must be at least 10 digits."
         }
       }
     },
     {
-      name: "confirmPassword",
-      label: "Confirm Password",
-      placeholderText: "Re-enter your password",
-      helperText: "Please re-enter your password to confirm.",
-      type: "password",
-      fieldType: "input",
-      validations: {
-        minLengthVal: {
-          minLength: 8,
-          validationMessage: "Password must be at least 8 characters long."
-        },
-        maxLengthVal: {
-          maxLenght: 16, // Corrected typo: maxLength
-          validationMessage: "Password cannot exceed 16 characters."
+      "fieldType": "input",
+      "name": "address",
+      "label": "Address",
+      "type": "text",
+      "placeholderText": "e.g. 123 Main St, Anytown, USA",
+      "helperText": "Enter your full residential address.",
+      "validations": {
+        "minLengthVal": {
+          "minLength": 10,
+          "validationMessage": "Address must be at least 10 characters long."
         }
-        // Note: Cross-field validation (e.g., password and confirmPassword matching)
-        // is typically handled by the form component's logic, not directly in this schema structure.
       }
-    },
-    {
-      name: "role",
-      label: "User Role",
-      type: "text",
-      fieldType: "select",
-      placeholderText: "Select your role",
-      options: [
-        { label: "Standard User", value: "standard_user" },
-        { label: "Premium User", value: "premium_user" },
-        { label: "Guest", value: "guest" }
-      ]
     }
   ]
-};
+}
+;

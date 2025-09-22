@@ -108,6 +108,8 @@ export async function POST(req: Request) {
       and just send JSON object in response 
       but if user send message other than genrating form your should able to response that
       i cannot answer this question tell me about genrating form for you.
+      but if some one greet you in starting of chat like hi, how are you
+      you must also greet them.
     `,
     messages: convertToModelMessages(messages),
   });

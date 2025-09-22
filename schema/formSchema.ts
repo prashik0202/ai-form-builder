@@ -25,7 +25,7 @@ export const formSchema = z.object({
               .optional(),
             maxLengthVal: z
               .object({
-                maxLenght: z.number(),
+                maxLength: z.number(),
                 validationMessage: z.string(),
               })
               .optional(),
@@ -35,7 +35,7 @@ export const formSchema = z.object({
                 validationMessage: z.string(),
               })
               .optional(),
-            mqxNumberVal: z
+            maxNumberVal: z
               .object({
                 maxNumber: z.number(),
                 validationMessage: z.string(),
@@ -69,7 +69,7 @@ export const formSchema = z.object({
               .optional(),
             maxLengthVal: z
               .object({
-                maxLenght: z.number(),
+                maxLength: z.number(),
                 validationMessage: z.string(),
               })
               .optional(),
@@ -79,7 +79,7 @@ export const formSchema = z.object({
                 validationMessage: z.string(),
               })
               .optional(),
-            mqxNumberVal: z
+            maxNumberVal: z
               .object({
                 maxNumber: z.number(),
                 validationMessage: z.string(),
