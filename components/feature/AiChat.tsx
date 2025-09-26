@@ -2,10 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
-import { Brain, EllipsisVertical, Loader, Paperclip, SendHorizonal, Sparkles } from 'lucide-react'
-import { useChat } from '@ai-sdk/react';
+import { Brain, EllipsisVertical, Loader, Paperclip, SendHorizonal } from 'lucide-react'
 import { Response } from '@/components/ai-elements/response';
-import { AIChatContextType, useAIChatContext } from '@/context/AiFormContextProvider';
+import { AIChatContextType } from '@/context/AiFormContextProvider';
 import { promptsExample } from '@/lib/promtsExample';
 
 interface AiChatProps {

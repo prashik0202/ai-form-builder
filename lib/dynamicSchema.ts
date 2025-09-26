@@ -25,7 +25,7 @@ export function dynamicFormSchema(fieldDefinations: FormFields[]) {
       }
 
       if(field.validations.maxLengthVal && fieldSchema instanceof z.ZodString) {
-        fieldSchema = fieldSchema.max(field.validations.maxLengthVal.maxLenght,field.validations.maxLengthVal.validationMessage )
+        fieldSchema = fieldSchema.max(field.validations.maxLengthVal.maxLength,field.validations.maxLengthVal.validationMessage )
       }
     }
 
