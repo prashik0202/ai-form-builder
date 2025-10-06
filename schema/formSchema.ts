@@ -91,3 +91,20 @@ export const formSchema = z.object({
     ])
   ),
 });
+
+export type formSchemaType = z.infer<typeof formSchema>;
+
+const BaseFieldSchema = z.object({
+  fieldType: z.enum(["input","select"]),
+  name: z.string(),
+  label: z.string(),
+  placeholderText: z.string().optional(),
+  helperText: z.string().optional() 
+});
+
+export type FieldFormType = z.infer<typeof BaseFieldSchema> & {
+  type?: string;
+  options: { label: string; value: string | number }[];
+};
+
+export type FormFieldType = z.infer<typeof formSchema>["fields"][number];
