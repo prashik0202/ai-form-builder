@@ -14,7 +14,6 @@ interface FieldEditorProps {
 const FieldEditor = ({ onAddField } : FieldEditorProps) => {
 
   const [showForm,setShowForm] = React.useState(false);
-  const [selectedType, setSelectedType] = React.useState<"input" | "select" | "">("");
 
   const { register, handleSubmit, control, reset, watch, setValue } = useForm<FieldFormType>({
     defaultValues: {

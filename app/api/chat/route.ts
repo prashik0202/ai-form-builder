@@ -38,7 +38,7 @@ export async function POST(req: Request) {
                     .optional(),
                   maxLengthVal: z
                     .object({
-                      maxLenght: z.number(),
+                      maxLength: z.number(),
                       validationMessage: z.string(),
                     })
                     .optional(),
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
                       validationMessage: z.string(),
                     })
                     .optional(),
-                  mqxNumberVal: z
+                  maxNumberVal: z
                     .object({
                       maxNumber: z.number(),
                       validationMessage: z.string(),
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
                     .optional(),
                   maxLengthVal: z
                     .object({
-                      maxLenght: z.number(),
+                      maxLength: z.number(),
                       validationMessage: z.string(),
                     })
                     .optional(),
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
                       validationMessage: z.string(),
                     })
                     .optional(),
-                  mqxNumberVal: z
+                  maxNumberVal: z
                     .object({
                       maxNumber: z.number(),
                       validationMessage: z.string(),

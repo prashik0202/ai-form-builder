@@ -9,10 +9,12 @@ import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { RefreshCcwIcon, Trash2 } from 'lucide-react';
 import FieldEditor from './FieldEditor';
+import { useFormBuilder } from '@/context/FormBuilderContextProvider';
 
 const FormBuilder = () => {
-
-  const [ fields, setFields] = React.useState<FormFieldType[]>([]);
+  console.log("formBuilder render")
+  // const [ fields, setFields] = React.useState<FormFieldType[]>([]);
+  const { fields, setFields, setSavedForm } = useFormBuilder();
 
   const form = useForm<Omit<formSchemaType, "fields">>({
     defaultValues: {
@@ -28,7 +30,7 @@ const FormBuilder = () => {
       ...data,
       fields
     }
-    console.log(fullForm);
+    setSavedForm(fullForm);
   }
 
   return (
