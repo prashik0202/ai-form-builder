@@ -11,8 +11,8 @@ interface FieldEditorProps {
   onAddField: (field: FormFieldType) => void
 }
 
-const FieldEditor = ({ onAddField } : FieldEditorProps) => {
-
+const FieldEditor = React.memo(({ onAddField } : FieldEditorProps) => {
+  console.log("FieldEditor Render")
   const [showForm,setShowForm] = React.useState(false);
 
   const { register, handleSubmit, control, reset, watch, setValue } = useForm<FieldFormType>({
@@ -193,6 +193,6 @@ const FieldEditor = ({ onAddField } : FieldEditorProps) => {
       )}
     </div>
   )
-}
+})
 
 export default FieldEditor

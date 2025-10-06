@@ -11,7 +11,7 @@ import { RefreshCcwIcon, Trash2 } from 'lucide-react';
 import FieldEditor from './FieldEditor';
 import { useFormBuilder } from '@/context/FormBuilderContextProvider';
 
-const FormBuilder = () => {
+const FormBuilder = React.memo(() => {
   console.log("formBuilder render")
   // const [ fields, setFields] = React.useState<FormFieldType[]>([]);
   const { fields, setFields, setSavedForm } = useFormBuilder();
@@ -24,6 +24,10 @@ const FormBuilder = () => {
       showResetButton: false,
     }
   });
+
+  const addField = React.useCallback((field: FormFieldType) => {
+    setFields((prev) => [...prev, field]);
+  }, [setFields]);
 
   const onSubmit = (data: Omit<formSchemaType, "fields">) => {
     const fullForm = {
@@ -110,7 +114,7 @@ const FormBuilder = () => {
                       onClick={() =>
                         setFields(fields.filter((_, i) => i !== idx))
                       }
-                    >
+                    > 
                       <Trash2 className='text-red-400'/>
                     </Button>
                   </li>
@@ -120,7 +124,7 @@ const FormBuilder = () => {
           </div>
 
           <FieldEditor
-            onAddField={(field) => setFields([...fields, field])}
+            onAddField={addField}
           />
           
           <div className='border my-2'/>
@@ -130,6 +134,6 @@ const FormBuilder = () => {
       </CardContent>
     </Card>
   )
-}
+})
 
 export default FormBuilder
