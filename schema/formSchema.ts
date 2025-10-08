@@ -93,6 +93,8 @@ export const formSchema = z.object({
 });
 
 export type formSchemaType = z.infer<typeof formSchema>;
+export type InputFieldType = Extract<formSchemaType["fields"][number], { fieldType: "input"}>;
+export type SelectFieldType = Extract<formSchemaType["fields"][number], { fieldType: "select"}>
 
 const BaseFieldSchema = z.object({
   fieldType: z.enum(["input","select"]),

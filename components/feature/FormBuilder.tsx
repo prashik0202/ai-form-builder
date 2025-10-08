@@ -1,139 +1,112 @@
 'use client';
-import React from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FormFieldType, formSchemaType } from '@/schema/formSchema';
-import { Controller, useForm } from 'react-hook-form';
+import { formSchemaType, InputFieldType, SelectFieldType } from '@/schema/formSchema'
+import React, { useState } from 'react'
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
-import { RefreshCcwIcon, Trash2 } from 'lucide-react';
-import FieldEditor from './FieldEditor';
-import { useFormBuilder } from '@/context/FormBuilderContextProvider';
+import { Plus } from 'lucide-react';
 
-const FormBuilder = React.memo(() => {
-  console.log("formBuilder render")
-  // const [ fields, setFields] = React.useState<FormFieldType[]>([]);
-  const { fields, setFields, setSavedForm } = useFormBuilder();
+const FormBuilder = () => {
 
-  const form = useForm<Omit<formSchemaType, "fields">>({
-    defaultValues: {
-      title: "",
-      description: "",
-      submitButtonText: "",
-      showResetButton: false,
-    }
+  const [formConfig, setFormConfig] = useState<formSchemaType>({
+    title: "Form Title",
+    description: "",
+    showResetButton: false,
+    submitButtonText: "Submit",
+    fields: []
   });
 
-  const addField = React.useCallback((field: FormFieldType) => {
-    setFields((prev) => [...prev, field]);
-  }, [setFields]);
+  const [editingField, setEditingField] = useState<formSchemaType["fields"] & { index: number}>();
+  const [showFieldForm, setShowFieldForm] = useState<boolean>(false);
 
-  const onSubmit = (data: Omit<formSchemaType, "fields">) => {
-    const fullForm = {
-      ...data,
-      fields
-    }
-    setSavedForm(fullForm);
+  const defaultInputFields: InputFieldType = {
+    fieldType: "input",
+    label: "",
+    name: "",
+    type: "text",
+    placeholderText: "",
+    helperText: "",
+    validations: {}
+  }
+
+  const defaultSelectFields: SelectFieldType = {
+    fieldType: "select",
+    label: "",
+    name: "",
+    options: [],
+    placeholderText: "Select an Option",
+    helperText: "",
+    type: "text",
+    validations: {}
+  }
+
+  const addField = (fieldType: "input" | "select") => {
+    const newField = fieldType === 'input' ? { ...defaultInputFields} : { defaultSelectFields};
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Form Settings</CardTitle>
-        <CardDescription>
-          Edit your fom metadata
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} className=''>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div className='flex flex-col gap-2 w-ful'>
-              <Label>Title</Label>
-              <Input
-                {...form.register("title")}
-                placeholder='Form title'
-              />
-            </div>
-            <div className='flex flex-col gap-2 w-full'>
-              <Label>Description</Label>
-              <Input
-                {...form.register("description")}
-                placeholder='Form description'
-              />
-            </div>
-            <div className='flex flex-col gap-2 w0-full'>
-              <Label>Subit Button Text</Label>
-              <Input
-                {...form.register("submitButtonText")}
-                placeholder='eg. submit, Contin'
-              />
-            </div>
-            <div className='flex items-center gap-3 justify-start'>
-              <Controller
-                name="showResetButton"
-                control={form.control}
-                render={({ field }) => (
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                    <label htmlFor="showResetButton">Show Reset Button</label>
-                  </div>
-                )}
-              />
-            </div>
-            <Button type='button' onClick={() => form.reset()} variant={"ghost"} size={"icon"}>
-              <RefreshCcwIcon />
+    <div className='flex flex-col gap-4'>
+      <div className='bg-accent p-4 rounded-md'>
+        <span className='text-md my-2'>Form Settings</span>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-5'>
+          <div className='flex flex-col gap-2'>
+            <Label>Form Title</Label>
+            <Input 
+              type="text" 
+              value={formConfig.title}
+              placeholder='Provide Form Title'
+              onChange={(e) => setFormConfig({ ...formConfig, title: e.target.value})}
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <Label>Submit Button Text</Label>
+            <Input 
+              type="text" 
+              value={formConfig.submitButtonText}
+              placeholder='Submit Button Text'
+              onChange={(e) => setFormConfig({ ...formConfig, submitButtonText: e.target.value})}
+            />
+          </div>
+          <div className='flex flex-col gap-2'>
+            <Label>Form Description</Label>
+            <Input 
+              type="text" 
+              value={formConfig.description}
+              placeholder='Submit Button Text'
+              onChange={(e) => setFormConfig({ ...formConfig, description: e.target.value})}
+            />
+          </div>
+          <div className='flex items-center gap-2'>
+            <Label>Show reset button on form</Label>
+            <Checkbox 
+              checked={formConfig.showResetButton} 
+              onCheckedChange={(checked) =>
+                setFormConfig({ ...formConfig, showResetButton: !!checked })
+              }
+            />
+          </div>
+        </div>
+        <div className='flex flex-col gap-3 my-2'>
+          <span className='text-md'>Form Fields</span>
+          <div className='flex flex-wrap gap-2'>
+            <Button 
+              variant={"outline"}
+              onClick={() => addField("input")}
+            >
+              <Plus /> Input Field
+            </Button>
+            <Button 
+              variant={"outline"}
+              onClick={() => addField("select")}
+            >
+              <Plus /> Select Field
             </Button>
           </div>
-
-          <div className='border col-span-2 my-2' />
-
-          <div className='col-span-2'>
-            <h2 className='text-md font-semibold mb-4'>Fields</h2>
-            <div>
-              {fields.length === 0 && (
-                <h3 className='text-muted-foreground text-sm'>No fields added yet</h3>
-              )}
-              <ul className="space-y-2">
-                {fields.length > 0 && fields.map((field, idx) => (
-                  <li
-                    key={idx}
-                    className="border rounded p-3 flex justify-between items-center"
-                  >
-                    <div>
-                      <p className="font-medium">{field.label}</p>
-                      <p className="text-sm text-gray-600">{field.fieldType}</p>
-                    </div>
-                    <Button
-                      type="button"
-                      variant={"ghost"}
-                      size={"icon"}
-                      onClick={() =>
-                        setFields(fields.filter((_, i) => i !== idx))
-                      }
-                    > 
-                      <Trash2 className='text-red-400'/>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <FieldEditor
-            onAddField={addField}
-          />
-          
-          <div className='border my-2'/>
-          <Button className='w-full md:w-fit'>Save Form</Button>
-
-        </form>
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   )
-})
+}
 
 export default FormBuilder
