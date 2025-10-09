@@ -5,7 +5,8 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
-import { Plus } from 'lucide-react';
+import { Info, Plus } from 'lucide-react';
+import FieldEditor from './FieldEditor';
 
 const FormBuilder = () => {
 
@@ -17,7 +18,7 @@ const FormBuilder = () => {
     fields: []
   });
 
-  const [editingField, setEditingField] = useState<formSchemaType["fields"] & { index: number}>();
+  const [editingField, setEditingField] = useState<((InputFieldType | SelectFieldType) & { index: number }) | null>(null);
   const [showFieldForm, setShowFieldForm] = useState<boolean>(false);
 
   const defaultInputFields: InputFieldType = {
@@ -42,13 +43,49 @@ const FormBuilder = () => {
   }
 
   const addField = (fieldType: "input" | "select") => {
-    const newField = fieldType === 'input' ? { ...defaultInputFields} : { defaultSelectFields};
+    const newField = fieldType === 'input' ? { ...defaultInputFields } : { ...defaultSelectFields };
+    setEditingField({
+      ...newField,
+      index: formConfig.fields.length
+    });
+    setShowFieldForm(true);
+  }
+
+  const editField = (index:number) => {
+    setEditingField({ ...formConfig.fields[index], index});
+    setShowFieldForm(true);
+  }
+
+  const deleteField = (index: number) => {
+    setFormConfig({
+      ...formConfig,
+      fields: formConfig.fields.filter((_,i) => i !== index)
+    });
+  } 
+
+  const onCloseFieldForm = () => {
+    setShowFieldForm(false);
+    setEditingField(null);
+  }
+
+  const saveField = (field: (InputFieldType | SelectFieldType) & { index: number }) => {
+    const { index, ...fieldData } = field;
+    const newFields = [...formConfig.fields];
+
+    if(index >= newFields.length) {
+      newFields.push(fieldData);
+    } else {
+      newFields[index] = fieldData;
+    }
+
+    setFormConfig({...formConfig, fields: newFields});
+    onCloseFieldForm();
   }
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='bg-accent p-4 rounded-md'>
-        <span className='text-md my-2'>Form Settings</span>
+      <div className='p-4 rounded-md'>
+        <span className='text-lg my-2'>Form Settings</span>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-5'>
           <div className='flex flex-col gap-2'>
             <Label>Form Title</Label>
@@ -102,6 +139,30 @@ const FormBuilder = () => {
             >
               <Plus /> Select Field
             </Button>
+          </div>
+          {showFieldForm && (
+            <FieldEditor
+              field={editingField}
+              onClose={onCloseFieldForm}
+              onSave={saveField}
+            />
+          )}
+          <div>
+            {formConfig.fields.length === 0 ? (
+              <div className='bg-accent p-2 rounded-md'>
+                <p className='text-sm text-muted-foreground flex items-center gap-2'>
+                 <Info className='w-4 h-4' /> No field added yet. Click on the button above to add field.
+                </p>
+              </div>
+            ) : (
+              <div className='flex flex-col gap-2'>
+                {formConfig.fields.map((field,index) => (
+                  <div key={index}>
+                    <span>{field.type}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
