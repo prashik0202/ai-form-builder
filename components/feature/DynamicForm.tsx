@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from "sonner"
 import { useForm } from "react-hook-form"
@@ -17,7 +17,7 @@ interface DynamicFormProps {
   formFields: BaseForm;
 }
 
-const DynamicForm = ({ formFields }: DynamicFormProps) => {
+const DynamicForm = React.memo(({ formFields }: DynamicFormProps) => {
 
   // generating zod schema dyanmically
   const schema = dynamicFormSchema(formFields.fields);
@@ -25,17 +25,23 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
   // return the type of Schema
   type schemaType = z.infer<ReturnType<typeof dynamicFormSchema>>;
 
-  // defacult  values
+  // default  values
   const defaultValues = formFields.fields.reduce((acc, field) => {
     acc[field.name] = "";
     return acc;
   }, { } as schemaType)
+
+  console.log(defaultValues);
 
   const form = useForm<schemaType>({
     resolver: zodResolver(schema),
     mode: "onChange",
     defaultValues
   });
+
+  React.useEffect(() => {
+    form.reset(defaultValues);
+  }, [formFields]); // Add form.reset to deps if needed
 
   const handleFormSubmit = async (data: schemaType) => {
     try {
@@ -112,7 +118,7 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className='w-full'>
-                                <SelectValue placeholder="Select a verified email to display" />
+                                <SelectValue placeholder={formField.placeholderText} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -160,6 +166,6 @@ const DynamicForm = ({ formFields }: DynamicFormProps) => {
       </CardContent>
     </Card>
   )
-}
+});
 
 export default DynamicForm
